@@ -83,7 +83,7 @@ export default function WordleBox({wordLength,maxGuesses,solution,listOfsolution
         <div className='w-1/2'>
             <WordleGrid maxLength={wordLength} maxTries={maxGuesses} guessLetters={[...letters,...word.split("").map((letter) => ({ state, letter })),]}/>
         </div>
-        <div className='w-2/3'>
+        <div className='md:w-2/3'>
             <Keyboard letters={letters} onKeyPress={addWordToGuess} onEnter={checkGuess} onBackspace={() => setWord(word.slice(0, -1))}/>
         </div>
     </>);
