@@ -46,7 +46,7 @@ export default function WordleBox({wordLength,maxGuesses,solution,listOfsolution
                     localStorage.clear();
                 }
             }else{
-                if (!!!listOfsolutions.includes(word)) {
+                if (!!!listOfsolutions[1].includes(word)) {
                     alert("Esa palabra no existe en el diccionario");
                     return;
                 }              
