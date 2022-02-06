@@ -1,23 +1,46 @@
-import logo from './logo.svg';
+import React,{ useCallback, useEffect } from 'react';
+
 import './App.css';
+import WordleBox from './components/WordleBox/WordleBox';
+
+const WORD_LENGTH = 5;
+const MAX_GUESSES = 6;
+
+function getDayOfTheYear(){
+  var now = new Date();
+  var start = new Date(now.getFullYear(), 0, 0);
+  var diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+  var oneDay = 1000 * 60 * 60 * 24;
+  var day = Math.floor(diff / oneDay);
+  return day;
+}
 
 function App() {
+  const [solution, setSolution] = React.useState([]);
+  async function getSolution() {
+    var listOfWords = [];
+    const response = await fetch("https://raw.githubusercontent.com/fvillena/palabras-diccionario-rae-completo/master/diccionario-rae-completo.txt");
+    const text = await response.text();
+    const words = text.split("\n");
+    for (let i = 0; i < words.length; i++) {
+      if (words[i].length === WORD_LENGTH) {
+        listOfWords.push(words[i].replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u").toLowerCase());
+      }
+    }
+    return [listOfWords[Math.floor(Math.random()*listOfWords.length)],listOfWords];
+  };
+  const getSolutionCallback = useCallback(getSolution, []);
+  useEffect(() => {
+    getSolutionCallback().then(setSolution);
+  }, [getSolutionCallback]);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <main className="flex flex-col justify-between items-center max-w-[650px] m-auto">
+        <header className="flex flex-row justify-center items-center p-1 min-w-full border-b border-neutral-300">
+          <h1 className="uppercase font-bold text-4xl tracking-wider">WORDLE</h1>
+        </header>
+        <WordleBox maxGuesses={MAX_GUESSES} wordLength={WORD_LENGTH} solution={solution[0]} listOfsolutions={solution} currentDay={getDayOfTheYear()}/>
+      </main>
     </div>
   );
 }
