@@ -18,14 +18,14 @@ export default function Keyboard({onKeyPress,onEnter,onBackspace,letters = []}) 
         return () => window.removeEventListener("keyup", onKeyup);
       });
     // go through keyboard keys and render each key
-    return <div className="w-full mt-10 mb-8">
+    return <div className="">
         {keys.map((row) => {
             return <div className="flex w-full gap-1" key={row}>
                 {row.map((key) => {
                     return <button key={key} onClick={() => onKeyPress(key)} className={"flex-1 keyboard-button font-bold text-xs h-14 rounded flex justify-center items-center mb-2 uppercase"+          
-                        (letters.filter(({ letter }) => letter === key).map(({ state }) => state).sort()[0] === 'success' ? " bg-green-500" : '' )+
-                    (letters.filter(({ letter }) => letter === key).map(({ state }) => state).sort()[0] === 'warn' ? " bg-yellow-600" : '' )+
-                    (letters.filter(({ letter }) => letter === key).map(({ state }) => state).sort()[0] === 'error' ? " bg-gray-500" : '' )}>{key}</button>
+                        (letters.filter(({ letter }) => letter === key).map(({ state }) => state).sort()[0] === 'success' ? " bg-green-600" : '' )+
+                    (letters.filter(({ letter }) => letter === key).map(({ state }) => state).sort()[0] === 'warn' ? " bg-orange-700" : '' )+
+                    (letters.filter(({ letter }) => letter === key).map(({ state }) => state).sort()[0] === 'error' ? " bg-zinc-800" : '' )}><span className='sm:px-3'>{key}</span></button>
                 })}
             </div>
         })}        

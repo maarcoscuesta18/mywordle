@@ -4,17 +4,15 @@ import WordleGrid from './WordleGrid';
 
 
 export default function WordleBox({wordLength,maxGuesses,solution,listOfsolutions,currentDay}) {
-    console.log(solution);
-    console.log(listOfsolutions);
+    //console.log(solution);
     const max_length = wordLength;
     const [day, setDay] = React.useState(localStorage.getItem('day') || null);
     const [current_guesses, setCurrentGuesses] = React.useState(localStorage.getItem('current_guesses') || 0);
     const [word, setWord] = React.useState(localStorage.getItem('word') || '');
     const [letters, setLetters] = React.useState(JSON.parse(localStorage.getItem('letters')) || []);
-    const [state, setState] = React.useState(localStorage.getItem('state') || null);
+    const [state, setState] = React.useState(localStorage.getItem('state') || 'none');
     const [isGameLose, setLose] = React.useState(localStorage.getItem('isGameLose') || false);
     const [isGameWon, setWin] = React.useState(localStorage.getItem('isGameWon') || false);
-    
     useEffect(() => {
         localStorage.setItem('word', word);
         localStorage.setItem('letters', JSON.stringify(letters));
@@ -22,7 +20,7 @@ export default function WordleBox({wordLength,maxGuesses,solution,listOfsolution
         localStorage.setItem('current_guesses', current_guesses);
         localStorage.setItem('isGameLose', isGameLose);
         localStorage.setItem('isGameWon', isGameWon);
-        localStorage.setItem('day', day);
+        localStorage.setItem('day', day);                
     }, [word, letters, state, current_guesses, isGameLose, isGameWon,day]);
 
     const checkGuess = useCallback(() => {
@@ -34,17 +32,11 @@ export default function WordleBox({wordLength,maxGuesses,solution,listOfsolution
             setCurrentGuesses(current_guesses + 1);
             setDay(currentDay);
             setWord("");
-            if (currentDay !== day) {
-                localStorage.clear();
-            }
         }else{
             if(current_guesses === maxGuesses+1){ 
                 setLose(true);
                 setDay(currentDay);
                 setWord("");
-                if (currentDay !== day) {
-                    localStorage.clear();
-                }
             }else{
                 if (!!!listOfsolutions[1].includes(word)) {
                     alert("Esa palabra no existe en el diccionario");
@@ -63,7 +55,7 @@ export default function WordleBox({wordLength,maxGuesses,solution,listOfsolution
                 setWord("");
             }
         }
-    },[word, letters,solution,isGameLose,isGameWon,current_guesses,maxGuesses,listOfsolutions,currentDay,day]);
+    },[word, letters,solution,isGameLose,isGameWon,current_guesses,maxGuesses,listOfsolutions,currentDay]);
     
     const addWordToGuess = useCallback((letterPressed) => {
         if(isGameWon || isGameLose) return;
@@ -80,10 +72,10 @@ export default function WordleBox({wordLength,maxGuesses,solution,listOfsolution
     },[checkGuess, max_length, word,isGameLose,isGameWon]);
     
     return (<>
-        <div className='w-1/2'>
+        <div className=''>
             <WordleGrid maxLength={wordLength} maxTries={maxGuesses} guessLetters={[...letters,...word.split("").map((letter) => ({ state, letter })),]}/>
         </div>
-        <div className='md:w-2/3'>
+        <div className='mt-40'>
             <Keyboard letters={letters} onKeyPress={addWordToGuess} onEnter={checkGuess} onBackspace={() => setWord(word.slice(0, -1))}/>
         </div>
     </>);

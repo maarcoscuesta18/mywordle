@@ -17,6 +17,7 @@ function getDayOfTheYear(){
 
 function App() {
   const [solution, setSolution] = React.useState([]);
+
   async function getSolution() {
     var listOfWords = [];
     const response = await fetch("https://raw.githubusercontent.com/fvillena/palabras-diccionario-rae-completo/master/diccionario-rae-completo.txt");
@@ -31,15 +32,20 @@ function App() {
   };
   const getSolutionCallback = useCallback(getSolution, []);
   useEffect(() => {
-    getSolutionCallback().then(setSolution);
+    if(getDayOfTheYear() !== parseInt(localStorage.getItem('day'))){
+      getSolutionCallback().then(setSolution);
+    }
   }, [getSolutionCallback]);
+
+  if (getDayOfTheYear() !== parseInt(localStorage.getItem('day'))){
+    localStorage.clear();
+  }
+
   return (
     <div className="App">
-      <main className="flex flex-col justify-between items-center max-w-[650px] m-auto">
-        <header className="flex flex-row justify-center items-center p-1 min-w-full border-b border-neutral-300">
+      <main className="flex flex-col justify-center items-center w-full">
           <h1 className="uppercase font-bold text-4xl tracking-wider">WORDLE</h1>
-        </header>
-        <WordleBox maxGuesses={MAX_GUESSES} wordLength={WORD_LENGTH} solution={solution[0]} listOfsolutions={solution} currentDay={getDayOfTheYear()}/>
+          <WordleBox maxGuesses={MAX_GUESSES} wordLength={WORD_LENGTH} solution={solution[0]} listOfsolutions={solution} currentDay={getDayOfTheYear()}/>
       </main>
     </div>
   );
