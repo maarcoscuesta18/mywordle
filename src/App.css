@@ -30,6 +30,8 @@ body{
   border-radius: 1px;
   box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.199);
   font-size: xx-large;
+  height: 60px;
+  width: 60px;
 }
 
 .keyboard-button{
