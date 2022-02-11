@@ -29,12 +29,14 @@ export default function WordleBox({wordLength,maxGuesses,solution,listOfsolution
         if(word === solution){
             setLetters([...letters,...word.split("").map((letter) => ({state:'success', letter })),]);
             setWin(true);
+            alert("Felicidades! Has Ganado! La palabra era: "+solution);
             setCurrentGuesses(current_guesses + 1);
             setDay(currentDay);
             setWord("");
         }else{
             if(current_guesses === maxGuesses+1){ 
                 setLose(true);
+                alert("Lastima! Has Perdido! La palabra era: "+solution);
                 setDay(currentDay);
                 setWord("");
             }else{
